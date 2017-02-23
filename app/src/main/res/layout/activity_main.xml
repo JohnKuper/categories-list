@@ -10,8 +10,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.korobeinikov.yandex_categories.MainActivity">
 
-    <TextView
+    <Button
+        android:id="@+id/btnMakeRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"/>
+        android:text="Request" />
+
+    <Button
+        android:id="@+id/btnGetCategories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnMakeRequest"
+        android:text="Get" />
+
 </RelativeLayout>
