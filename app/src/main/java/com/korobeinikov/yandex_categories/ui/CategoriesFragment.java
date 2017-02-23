@@ -1,6 +1,7 @@
 package com.korobeinikov.yandex_categories.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.widget.ListView;
 
 import com.korobeinikov.yandex_categories.R;
 import com.korobeinikov.yandex_categories.model.CategoriesContract;
+import com.korobeinikov.yandex_categories.network.CategoriesRequester;
 
 import static com.korobeinikov.yandex_categories.model.CategoriesContract.Categories.CONTENT_URI;
 
@@ -70,7 +72,7 @@ public class CategoriesFragment extends Fragment implements LoaderManager.Loader
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getActionBar().setTitle(mTitle);
-        getActionBar().setDisplayHomeAsUpEnabled(mParentCategoryID != ID_ROOT_CATEGORY);
+        getActionBar().setDisplayHomeAsUpEnabled(!isRootCategory());
     }
 
     @Override
@@ -111,12 +113,25 @@ public class CategoriesFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdapter.swapCursor(data);
+        if (isDatabaseEmpty(data)) {
+            Intent intent = new Intent(getContext(), CategoriesRequester.class);
+            getActivity().startService(intent);
+        } else {
+            mAdapter.swapCursor(data);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
+    }
+
+    private boolean isRootCategory() {
+        return mParentCategoryID == ID_ROOT_CATEGORY;
+    }
+
+    private boolean isDatabaseEmpty(Cursor cursor) {
+        return isRootCategory() && cursor.getCount() == 0;
     }
 
     private ActionBar getActionBar() {

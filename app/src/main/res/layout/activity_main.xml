@@ -8,13 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.korobeinikov.yandex_categories.ui.MainActivity">
 
-    <Button
-        android:id="@+id/btnMakeRequest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:text="Request" />
-
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
