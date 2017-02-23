@@ -6,16 +6,17 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.korobeinikov.yandex_categories.R;
-import com.korobeinikov.yandex_categories.db.CategoriesPersister;
 import com.korobeinikov.yandex_categories.network.CategoriesRequester;
 import com.korobeinikov.yandex_categories.ui.CategoriesFragment.OnCategoryClickListener;
 
+import static com.korobeinikov.yandex_categories.ui.CategoriesFragment.ID_ROOT_CATEGORY;
+
 
 public class MainActivity extends AppCompatActivity implements OnCategoryClickListener {
-    private static final long ID_ROOT_CATEGORY = -1;
 
     private FragmentManager mFragmentManager;
 
@@ -32,13 +33,20 @@ public class MainActivity extends AppCompatActivity implements OnCategoryClickLi
                 startService(intent);
             }
         });
+    }
 
-        findViewById(R.id.btnGetCategories).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CategoriesPersister provider = new CategoriesPersister(MainActivity.this);
-            }
-        });
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                clearBackStack();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void clearBackStack() {
+        mFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     private void addInitialFragment() {

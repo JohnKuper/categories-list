@@ -7,6 +7,7 @@ import android.net.Uri;
 
 import com.korobeinikov.yandex_categories.model.CategoriesContract;
 import com.korobeinikov.yandex_categories.model.Category;
+import com.korobeinikov.yandex_categories.ui.CategoriesFragment;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class CategoriesPersister {
     }
 
     public void putToCache(List<Category> categories) {
-        insertRecursively(categories, -1);
+        insertRecursively(categories, CategoriesFragment.ID_ROOT_CATEGORY);
     }
 
     @SuppressWarnings("ConstantConditions")

@@ -9,7 +9,6 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.korobeinikov.yandex_categories.R;
-import com.korobeinikov.yandex_categories.model.Category;
 
 import static com.korobeinikov.yandex_categories.model.CategoriesContract.Categories.TITLE;
 
@@ -31,12 +30,14 @@ public class CategoriesCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView categoryTitle = (TextView) view.findViewById(R.id.tvCategoryTitle);
-        Category category = Category.fromCursor(cursor);
-        categoryTitle.setText(category.getTitle());
+        categoryTitle.setText(getCategoryTitle(cursor));
     }
 
     public String getCategoryTitle(int position) {
-        Cursor cursor = (Cursor) getItem(position);
-        return cursor.getColumnName(cursor.getColumnIndex(TITLE));
+        return getCategoryTitle((Cursor) getItem(position));
+    }
+
+    private String getCategoryTitle(Cursor cursor) {
+        return cursor.getString(cursor.getColumnIndex(TITLE));
     }
 }

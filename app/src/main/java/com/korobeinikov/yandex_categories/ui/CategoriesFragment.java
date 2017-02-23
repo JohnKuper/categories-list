@@ -9,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +30,7 @@ public class CategoriesFragment extends Fragment implements LoaderManager.Loader
 
     private static final String ARG_CATEGORY_TITLE = "ARG_CATEGORY_TITLE";
     private static final String ARG_PARENT_CATEGORY_ID = "ARG_PARENT_CATEGORY_ID";
-    private static final int ID_LOADER = 1;
+    public static final long ID_ROOT_CATEGORY = -1;
 
     private ListView mCategoriesList;
     private CategoriesCursorAdapter mAdapter;
@@ -58,16 +60,17 @@ public class CategoriesFragment extends Fragment implements LoaderManager.Loader
         parseArguments();
     }
 
-    private void parseArguments() {
-        Bundle args = getArguments();
-        mTitle = args.getString(ARG_CATEGORY_TITLE);
-        mParentCategoryID = args.getLong(ARG_PARENT_CATEGORY_ID);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_categories, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getActionBar().setTitle(mTitle);
+        getActionBar().setDisplayHomeAsUpEnabled(mParentCategoryID != ID_ROOT_CATEGORY);
     }
 
     @Override
@@ -88,10 +91,16 @@ public class CategoriesFragment extends Fragment implements LoaderManager.Loader
         mOnCategoryClickListener = null;
     }
 
+    private void parseArguments() {
+        Bundle args = getArguments();
+        mTitle = args.getString(ARG_CATEGORY_TITLE);
+        mParentCategoryID = args.getLong(ARG_PARENT_CATEGORY_ID);
+    }
+
     private void setupAdapter() {
         mAdapter = new CategoriesCursorAdapter(getContext(), null, 0);
         mCategoriesList.setAdapter(mAdapter);
-        getLoaderManager().initLoader(ID_LOADER, null, this);
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -108,6 +117,10 @@ public class CategoriesFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
+    }
+
+    private ActionBar getActionBar() {
+        return ((AppCompatActivity) getActivity()).getSupportActionBar();
     }
 
     public interface OnCategoryClickListener {

@@ -12,14 +12,8 @@
         android:id="@+id/btnMakeRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:text="Request" />
-
-    <Button
-        android:id="@+id/btnGetCategories"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnMakeRequest"
-        android:text="Get" />
 
     <FrameLayout
         android:id="@+id/container"
