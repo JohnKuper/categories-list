@@ -4,27 +4,27 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import static android.provider.BaseColumns._ID;
+import static com.korobeinikov.yandex_categories.model.CategoriesContract.Categories.CATEGORY_ID;
+import static com.korobeinikov.yandex_categories.model.CategoriesContract.Categories.PARENT_ID;
+import static com.korobeinikov.yandex_categories.model.CategoriesContract.Categories.TABLE_NAME;
+import static com.korobeinikov.yandex_categories.model.CategoriesContract.Categories.TITLE;
+
 /**
  * Created by Dmitriy_Korobeinikov.
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DB_NAME = "yandex.money";
+    private static final String DB_NAME = "yandex.money.db";
     private static final int DATABASE_VERSION = 1;
 
-    public static final String TABLE_CATEGORIES = "categories";
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_TITLE = "title";
-    public static final String COLUMN_CATEGORY_ID = "category_id";
-    public static final String COLUMN_PARENT_ID = "parent_id";
-
     private static final String CREATE_TABLE_CATEGORIES =
-            " CREATE TABLE " + TABLE_CATEGORIES +
-                    "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    + COLUMN_TITLE + " TEXT NOT NULL, "
-                    + COLUMN_CATEGORY_ID + " INT, "
-                    + COLUMN_PARENT_ID + " INT" + ");";
+            " CREATE TABLE " + TABLE_NAME +
+                    "(" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + TITLE + " TEXT NOT NULL, "
+                    + CATEGORY_ID + " INT, "
+                    + PARENT_ID + " INT" + ");";
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DATABASE_VERSION);
@@ -37,7 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
 

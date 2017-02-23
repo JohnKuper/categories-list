@@ -4,9 +4,9 @@ import android.database.Cursor;
 
 import java.util.ArrayList;
 
-import static com.korobeinikov.yandex_categories.db.DatabaseHelper.COLUMN_CATEGORY_ID;
-import static com.korobeinikov.yandex_categories.db.DatabaseHelper.COLUMN_PARENT_ID;
-import static com.korobeinikov.yandex_categories.db.DatabaseHelper.COLUMN_TITLE;
+import static com.korobeinikov.yandex_categories.model.CategoriesContract.Categories.CATEGORY_ID;
+import static com.korobeinikov.yandex_categories.model.CategoriesContract.Categories.PARENT_ID;
+import static com.korobeinikov.yandex_categories.model.CategoriesContract.Categories.TITLE;
 
 /**
  * Created by Dmitriy_Korobeinikov.
@@ -21,9 +21,9 @@ public class Category {
 
     public static Category fromCursor(Cursor cursor) {
         Category category = new Category();
-        category.setCategoryId(cursor.getInt(cursor.getColumnIndex(COLUMN_CATEGORY_ID)));
-        category.setParentId(cursor.getInt(cursor.getColumnIndex(COLUMN_PARENT_ID)));
-        category.setTitle(cursor.getString(cursor.getColumnIndex(COLUMN_TITLE)));
+        category.setCategoryId(cursor.getInt(cursor.getColumnIndex(CATEGORY_ID)));
+        category.setParentId(cursor.getInt(cursor.getColumnIndex(PARENT_ID)));
+        category.setTitle(cursor.getString(cursor.getColumnIndex(TITLE)));
         return category;
     }
 

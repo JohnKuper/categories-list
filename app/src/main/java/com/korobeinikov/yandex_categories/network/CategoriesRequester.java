@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.korobeinikov.yandex_categories.BuildConfig;
-import com.korobeinikov.yandex_categories.db.CategoriesProvider;
+import com.korobeinikov.yandex_categories.db.CategoriesPersister;
 import com.korobeinikov.yandex_categories.model.Category;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -64,7 +64,7 @@ public class CategoriesRequester extends IntentService {
     }
 
     private void putToCache(ArrayList<Category> categories) {
-        CategoriesProvider provider = new CategoriesProvider(getApplicationContext());
-        provider.putToCache(categories);
+        CategoriesPersister persister = new CategoriesPersister(getApplicationContext());
+        persister.putToCache(categories);
     }
 }
