@@ -25,7 +25,7 @@ public class CategoriesRequester extends Requester<List<Category>> {
         super(responseListener);
     }
 
-    public void executeRequest() {
+    public void requestCategories() {
         final Request request = new Request.Builder().url(BuildConfig.CATEGORIES_URL).build();
         mClient.newCall(request).enqueue(new Callback() {
             @Override

@@ -13,5 +13,6 @@ public abstract class Requester<T> {
 
     public Requester(ResponseListener<T> responseListener) {
         mResponseListener = responseListener;
+        mClient.interceptors().add(new NetworkAvailabilityInterceptor());
     }
 }

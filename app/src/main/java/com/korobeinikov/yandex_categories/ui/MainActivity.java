@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -24,18 +25,36 @@ public class MainActivity extends AppCompatActivity implements OnCategoryClickLi
 
     private FragmentManager mFragmentManager;
     private CategoriesPersister mCategoriesPersister;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mCategoriesPersister = new CategoriesPersister(this);
+        initFields();
         addInitialFragment();
         requestCategories();
     }
 
-    private void addInitialFragment() {
+    private void initFields() {
+        mCategoriesPersister = new CategoriesPersister(this);
         mFragmentManager = getSupportFragmentManager();
+        mFragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                adjustSwipeRefreshAvailability(mFragmentManager.getBackStackEntryCount());
+            }
+        });
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestCategories();
+            }
+        });
+    }
+
+    private void addInitialFragment() {
         Fragment fragment = mFragmentManager.findFragmentById(R.id.container);
         if (fragment == null) {
             fragment = CategoriesFragment.newInstance(getString(R.string.root_categories_title), ID_ROOT_CATEGORY);
@@ -46,7 +65,19 @@ public class MainActivity extends AppCompatActivity implements OnCategoryClickLi
     private void requestCategories() {
         if (mCategoriesPersister.isDatabaseEmpty()) {
             CategoriesRequester requester = new CategoriesRequester(this);
-            requester.executeRequest();
+            requester.requestCategories();
+        } else {
+            hideProgress();
+        }
+    }
+
+    private void adjustSwipeRefreshAvailability(int backStackCount) {
+        mSwipeRefreshLayout.setEnabled(backStackCount == 0);
+    }
+
+    private void hideProgress() {
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -65,8 +96,8 @@ public class MainActivity extends AppCompatActivity implements OnCategoryClickLi
     }
 
     @Override
-    public void onCategoryClick(@NonNull String title, long id) {
-        CategoriesFragment fragment = CategoriesFragment.newInstance(title, id);
+    public void onCategoryClick(@NonNull String title, long categoryID) {
+        CategoriesFragment fragment = CategoriesFragment.newInstance(title, categoryID);
         mFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment, null)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -76,6 +107,12 @@ public class MainActivity extends AppCompatActivity implements OnCategoryClickLi
 
     @Override
     public void onSuccess(List<Category> categories) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                hideProgress();
+            }
+        });
         mCategoriesPersister.putToCache(categories);
     }
 
@@ -84,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements OnCategoryClickLi
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                hideProgress();
                 Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
