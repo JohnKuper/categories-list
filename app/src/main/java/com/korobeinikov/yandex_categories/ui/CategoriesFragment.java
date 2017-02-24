@@ -15,7 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.korobeinikov.yandex_categories.R;
 
@@ -33,6 +35,8 @@ public class CategoriesFragment extends Fragment implements LoaderManager.Loader
     public static final long ID_ROOT_CATEGORY = -1;
 
     private ListView mCategoriesList;
+    private ImageView mEmptyIcon;
+    private TextView mEmptyLabel;
     private CategoriesCursorAdapter mAdapter;
     private OnCategoryClickListener mOnCategoryClickListener;
 
@@ -75,13 +79,7 @@ public class CategoriesFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mCategoriesList = (ListView) view.findViewById(R.id.categoriesList);
-        mCategoriesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mOnCategoryClickListener.onCategoryClick(mAdapter.getCategoryTitle(position), id);
-            }
-        });
+        initViews(view);
         setupAdapter();
     }
 
@@ -89,6 +87,18 @@ public class CategoriesFragment extends Fragment implements LoaderManager.Loader
     public void onDetach() {
         super.onDetach();
         mOnCategoryClickListener = null;
+    }
+
+    private void initViews(View view) {
+        mEmptyIcon = (ImageView) view.findViewById(R.id.ivEmptyIcon);
+        mEmptyLabel = (TextView) view.findViewById(R.id.tvEmptyCategoryLabel);
+        mCategoriesList = (ListView) view.findViewById(R.id.categoriesList);
+        mCategoriesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mOnCategoryClickListener.onCategoryClick(mAdapter.getCategoryTitle(position), id);
+            }
+        });
     }
 
     private void parseArguments() {
@@ -103,6 +113,12 @@ public class CategoriesFragment extends Fragment implements LoaderManager.Loader
         getLoaderManager().initLoader(0, null, this);
     }
 
+    private void showEmptyIndicator(boolean isShown) {
+        int mask = isShown ? View.VISIBLE : View.GONE;
+        mEmptyIcon.setVisibility(mask);
+        mEmptyLabel.setVisibility(mask);
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String whereClause = PARENT_ID + " = " + mParentCategoryID;
@@ -112,6 +128,7 @@ public class CategoriesFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mAdapter.swapCursor(data);
+        showEmptyIndicator(!isRootCategory() && data.getCount() == 0);
     }
 
     @Override

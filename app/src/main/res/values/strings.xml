@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Yandex Categories</string>
     <string name="root_categories_title">Root Categories</string>
+    <string name="category_is_empty">Category is empty</string>
 </resources>

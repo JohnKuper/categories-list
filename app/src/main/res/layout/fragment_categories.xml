@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/categoriesList"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:divider="@null" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/categoriesList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@null" />
+
+    <ImageView
+        android:id="@+id/ivEmptyIcon"
+        android:layout_width="@dimen/empty_icon_size"
+        android:layout_height="@dimen/empty_icon_size"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_empty_list"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvEmptyCategoryLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivEmptyIcon"
+        android:layout_centerHorizontal="true"
+        android:text="@string/category_is_empty"
+        android:visibility="gone" />
+
+</RelativeLayout>
