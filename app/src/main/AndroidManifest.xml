@@ -20,8 +20,6 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".network.CategoriesRequester" />
-
         <provider
             android:name=".db.CategoriesContentProvider"
             android:authorities="com.korobeinikov.yandex.categories"

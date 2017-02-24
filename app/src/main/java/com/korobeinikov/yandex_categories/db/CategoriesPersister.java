@@ -3,6 +3,7 @@ package com.korobeinikov.yandex_categories.db;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 
 import com.korobeinikov.yandex_categories.model.CategoriesContract;
@@ -47,5 +48,15 @@ public class CategoriesPersister {
         values.put(CategoriesContract.Categories.CATEGORY_ID, category.getCategoryId());
         values.put(CategoriesContract.Categories.PARENT_ID, parentId);
         return values;
+    }
+
+    public boolean isDatabaseEmpty() {
+        Cursor cursor = mResolver.query(CONTENT_URI, null, null, null, null);
+        boolean isEmpty = true;
+        if (cursor != null && cursor.getCount() > 0) {
+            isEmpty = false;
+            cursor.close();
+        }
+        return isEmpty;
     }
 }
