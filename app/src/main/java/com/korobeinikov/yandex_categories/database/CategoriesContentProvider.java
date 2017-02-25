@@ -1,4 +1,4 @@
-package com.korobeinikov.yandex_categories.db;
+package com.korobeinikov.yandex_categories.database;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;

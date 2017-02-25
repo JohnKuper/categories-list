@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.korobeinikov.yandex_categories.R;
-import com.korobeinikov.yandex_categories.db.CategoriesPersister;
+import com.korobeinikov.yandex_categories.database.CategoriesPersister;
 import com.korobeinikov.yandex_categories.model.Category;
 import com.korobeinikov.yandex_categories.network.CategoriesRequester;
 import com.korobeinikov.yandex_categories.network.ResponseListener;

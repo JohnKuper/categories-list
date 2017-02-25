@@ -3,7 +3,6 @@ package com.korobeinikov.yandex_categories;
 import android.app.Application;
 import android.content.Context;
 
-import com.facebook.stetho.Stetho;
 import com.korobeinikov.yandex_categories.network.NetworkAvailabilityInterceptor;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -21,7 +20,6 @@ public class CategoriesApp extends Application {
         super.onCreate();
         sCategoriesApp = this;
         setupNetworkClient();
-        Stetho.initializeWithDefaults(this);
     }
 
     private void setupNetworkClient() {

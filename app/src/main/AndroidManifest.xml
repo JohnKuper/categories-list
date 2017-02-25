@@ -22,7 +22,7 @@
         </activity>
 
         <provider
-            android:name=".db.CategoriesContentProvider"
+            android:name=".database.CategoriesContentProvider"
             android:authorities="com.korobeinikov.yandex.categories"
             android:exported="false" />
 
