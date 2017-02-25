@@ -32,7 +32,7 @@ public class CategoriesFragment extends Fragment implements LoaderManager.Loader
 
     private static final String ARG_CATEGORY_TITLE = "ARG_CATEGORY_TITLE";
     private static final String ARG_PARENT_CATEGORY_ID = "ARG_PARENT_CATEGORY_ID";
-    public static final long ID_ROOT_CATEGORY = -1;
+    public static final long ID_ROOT_CATEGORY = 0;
 
     private ListView mCategoriesList;
     private ImageView mEmptyIcon;

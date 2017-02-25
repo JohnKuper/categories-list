@@ -35,8 +35,8 @@ public class CategoriesPersister {
         for (Category category : categories) {
             ContentValues values = createValues(category, parentId);
             Uri uri = mResolver.insert(CONTENT_URI, values);
-            int insertId = Integer.valueOf(uri.getLastPathSegment());
-            if (category.hasSubs()) {
+            long insertId = Long.valueOf(uri.getLastPathSegment());
+            if (insertId > 0 && category.hasSubs()) {
                 insertRecursively(category.getSubs(), insertId);
             }
         }
