@@ -19,7 +19,7 @@ public class NetworkAvailabilityInterceptor implements Interceptor {
         if (isNetworkAvailable(CategoriesApp.getAppContext())) {
             return chain.proceed(chain.request());
         } else {
-            throw new IOException("Please check your network connection");
+            throw new NoNetworkException();
         }
     }
 }
