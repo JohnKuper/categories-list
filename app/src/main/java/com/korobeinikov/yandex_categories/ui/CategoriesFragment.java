@@ -23,6 +23,7 @@ import com.korobeinikov.yandex_categories.R;
 
 import static com.korobeinikov.yandex_categories.model.CategoriesContract.Categories.CONTENT_URI;
 import static com.korobeinikov.yandex_categories.model.CategoriesContract.Categories.PARENT_ID;
+import static com.korobeinikov.yandex_categories.model.Category.ID_ROOT_CATEGORY;
 
 /**
  * Created by Dmitriy_Korobeinikov.
@@ -32,7 +33,6 @@ public class CategoriesFragment extends Fragment implements LoaderManager.Loader
 
     private static final String ARG_CATEGORY_TITLE = "ARG_CATEGORY_TITLE";
     private static final String ARG_PARENT_CATEGORY_ID = "ARG_PARENT_CATEGORY_ID";
-    public static final long ID_ROOT_CATEGORY = 0;
 
     private ListView mCategoriesList;
     private ImageView mEmptyIcon;
@@ -121,7 +121,7 @@ public class CategoriesFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String whereClause = PARENT_ID + " = " + mParentCategoryID;
+        String whereClause = mParentCategoryID > 0 ? PARENT_ID + " = " + mParentCategoryID : PARENT_ID + " IS NULL";
         return new CursorLoader(getContext(), CONTENT_URI, null, whereClause, null, null);
     }
 

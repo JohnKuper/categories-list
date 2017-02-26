@@ -19,7 +19,7 @@ import com.korobeinikov.yandex_categories.ui.CategoriesFragment.OnCategoryClickL
 
 import java.util.List;
 
-import static com.korobeinikov.yandex_categories.ui.CategoriesFragment.ID_ROOT_CATEGORY;
+import static com.korobeinikov.yandex_categories.model.Category.ID_ROOT_CATEGORY;
 
 public class MainActivity extends AppCompatActivity implements OnCategoryClickListener, ResponseListener<List<Category>> {
 

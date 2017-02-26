@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class Category {
 
+    public static final long ID_ROOT_CATEGORY = 0;
+
     private int mCategoryId;
     private String mTitle;
     private ArrayList<Category> mSubs;

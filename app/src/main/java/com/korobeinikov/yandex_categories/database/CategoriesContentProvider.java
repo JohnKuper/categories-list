@@ -1,9 +1,12 @@
 package com.korobeinikov.yandex_categories.database;
 
 import android.content.ContentProvider;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.OperationApplicationException;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,6 +15,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.korobeinikov.yandex_categories.model.CategoriesContract;
+
+import java.util.ArrayList;
 
 import static com.korobeinikov.yandex_categories.model.CategoriesContract.Categories.CONTENT_URI;
 import static com.korobeinikov.yandex_categories.model.CategoriesContract.Categories.TABLE_NAME;
@@ -59,10 +64,29 @@ public class CategoriesContentProvider extends ContentProvider {
         return type;
     }
 
+    @NonNull
+    @Override
+    public ContentProviderResult[] applyBatch(@NonNull ArrayList<ContentProviderOperation> operations)
+            throws OperationApplicationException {
+        final SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            final int numOperations = operations.size();
+            final ContentProviderResult[] results = new ContentProviderResult[numOperations];
+            for (int i = 0; i < numOperations; i++) {
+                results[i] = operations.get(i).apply(this, results, i);
+            }
+            db.setTransactionSuccessful();
+            return results;
+        } finally {
+            db.endTransaction();
+        }
+    }
+
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        final SQLiteDatabase db = mDBHelper.getWritableDatabase();
         long insertID = db.insert(TABLE_NAME, null, values);
         Uri resultUri = ContentUris.withAppendedId(CONTENT_URI, insertID);
         mResolver.notifyChange(resultUri, null, false);
@@ -72,7 +96,7 @@ public class CategoriesContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        final SQLiteDatabase db = mDBHelper.getWritableDatabase();
         Cursor cursor = db.query(TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
         cursor.setNotificationUri(mResolver, uri);
         return cursor;
