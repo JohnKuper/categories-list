@@ -121,7 +121,7 @@ public class CategoriesFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String whereClause = mParentCategoryID > 0 ? PARENT_ID + " = " + mParentCategoryID : PARENT_ID + " IS NULL";
+        String whereClause = isRootCategory() ? PARENT_ID + " IS NULL" : PARENT_ID + " = " + mParentCategoryID;
         return new CursorLoader(getContext(), CONTENT_URI, null, whereClause, null, null);
     }
 
